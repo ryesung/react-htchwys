@@ -8,8 +8,14 @@ const PAGE_SIZES = [15, 25, 50, 100];
 function BlogList() {
   const currentPaginationData = blogs.posts.slice(0, 15);
 
-  const updateRowsPerPage = () => {};
-  const updatePage = () => {};
+  const updateRowsPerPage = ({value}) => {
+    currentPage = 1;
+    pageSize = value};
+  const updatePage = ({currentPage, pageSize}) => {
+    const blogSliceStart = pageSize * currentPage
+    currentPaginationData = blogs.posts.slice(blogSliceStart, blogSliceStart + pageSize)
+    
+  };
 
   return (
     <div>
