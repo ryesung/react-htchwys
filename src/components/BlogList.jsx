@@ -1,28 +1,47 @@
 import BlogPost from "./BlogPost";
 import Pagination from "./Pagination";
-import React from "react";
+import React, {useState} from "react";
 import blogs from "../data/blogs.json";
 
 const PAGE_SIZES = [15, 25, 50, 100];
+const blogsPosts = blogs.posts
 
 function BlogList() {
-  const currentPaginationData = blogs.posts.slice(0, 15);
 
-  const updateRowsPerPage = ({value}) => {
-    currentPage = 1;
-    pageSize = value};
-  const updatePage = ({currentPage, pageSize}) => {
-    const blogSliceStart = pageSize * currentPage
-    currentPaginationData = blogs.posts.slice(blogSliceStart, blogSliceStart + pageSize)
+
+  const [currentPageSize, changePageSize] = useState(15)
+  const [currentPageNumber, changePageNumber] = useState(1)
+  const [currentPaginationData, changePaginationData] = useState(blogsPosts.slice(0, 15));
+
+  const updateRowsPerPage = (newRowsPerPage) => {
+    changePageSize(parseInt(newRowsPerPage));
+    changePageNumber(1);
+    changePaginationData(blogs.posts.slice(0,  newRowsPerPage));
     
   };
 
+  const updatePage = (newCurrentPage) => {
+    let firstIndices;
+    let secondIndices;
+    changePageNumber(newCurrentPage);
+    if (newCurrentPage === 1 ){
+      firstIndices = 0;
+      secondIndices = currentPageSize;
+      changePaginationData(blogs.posts.slice(firstIndices, secondIndices));
+    } else {
+      firstIndices = (newCurrentPage -1)* currentPageSize;
+      secondIndices = firstIndices + currentPageSize;
+      changePaginationData(blogs.posts.slice(firstIndices, secondIndices));
+      
+    }
+    ;
+  };
   return (
     <div>
       <Pagination
-        currentPage={1}
+        currentPage={currentPageNumber}
         totalCount={blogs.posts.length}
-        pageSize={15}
+        pageSize={currentPageSize}
         pageSizeOptions={PAGE_SIZES}
         onPageChange={updatePage}
         onPageSizeOptionChange={updateRowsPerPage}

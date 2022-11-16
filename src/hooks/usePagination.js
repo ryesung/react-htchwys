@@ -1,5 +1,6 @@
 export const DOTS = "...";
 
+
 function usePagination({currentPage, totalCount, pageSize}) {
   
   const firstPage = 1;
