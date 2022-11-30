@@ -1,47 +1,42 @@
 import BlogPost from "./BlogPost";
 import Pagination from "./Pagination";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import blogs from "../data/blogs.json";
 
 const PAGE_SIZES = [15, 25, 50, 100];
-const blogsPosts = blogs.posts
+const blogsPosts = blogs.posts;
 
 function BlogList() {
-
-
-  const [currentPageSize, changePageSize] = useState(15)
-  const [currentPageNumber, changePageNumber] = useState(1)
-  const [currentPaginationData, changePaginationData] = useState(blogsPosts.slice(0, 15));
+  const [PageSize, setPageSize] = useState(15);
+  const [PageNumber, setPageNumber] = useState(1);
+  const [PaginationData, setPaginationData] = useState(blogsPosts.slice(0, 15));
 
   const updateRowsPerPage = (newRowsPerPage) => {
-    changePageSize(parseInt(newRowsPerPage));
-    changePageNumber(1);
-    changePaginationData(blogs.posts.slice(0,  newRowsPerPage));
-    
+    setPageSize(parseInt(newRowsPerPage));
+    setPageNumber(1);
+    setPaginationData(blogs.posts.slice(0, newRowsPerPage));
   };
 
   const updatePage = (newCurrentPage) => {
     let firstIndices;
     let secondIndices;
-    changePageNumber(newCurrentPage);
-    if (newCurrentPage === 1 ){
+    setPageNumber(newCurrentPage);
+    if (newCurrentPage === 1) {
       firstIndices = 0;
-      secondIndices = currentPageSize;
-      changePaginationData(blogs.posts.slice(firstIndices, secondIndices));
+      secondIndices = PageSize;
+      setPaginationData(blogs.posts.slice(firstIndices, secondIndices));
     } else {
-      firstIndices = (newCurrentPage -1)* currentPageSize;
-      secondIndices = firstIndices + currentPageSize;
-      changePaginationData(blogs.posts.slice(firstIndices, secondIndices));
-      
+      firstIndices = (newCurrentPage - 1) * PageSize;
+      secondIndices = firstIndices + PageSize;
+      setPaginationData(blogs.posts.slice(firstIndices, secondIndices));
     }
-    ;
   };
   return (
     <div>
       <Pagination
-        currentPage={currentPageNumber}
+        currentPage={PageNumber}
         totalCount={blogs.posts.length}
-        pageSize={currentPageSize}
+        pageSize={PageSize}
         pageSizeOptions={PAGE_SIZES}
         onPageChange={updatePage}
         onPageSizeOptionChange={updateRowsPerPage}
@@ -50,7 +45,7 @@ function BlogList() {
         // Do not modify the aria-label below, it is used for Hatchways automation.
         aria-label="blog list"
       >
-        {currentPaginationData.map((blog) => (
+        {PaginationData.map((blog) => (
           <BlogPost
             key={blog.id}
             author={blog.author}
